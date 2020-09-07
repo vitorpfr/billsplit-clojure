@@ -3,7 +3,6 @@ $(function () {
     var customers = $('.customer').length;
     var customersarray = []
     for (j = 0; j < customers; j++) {
-
         customersarray.push(document.getElementById("customer" + j).value);
     }
 
@@ -28,18 +27,19 @@ $(function () {
 
     // Function to add cards (products)
     $(".add-row").click(function () {
+        alert("Testing")
         var product = $('.product').length;
 
         var markup = `
           <div class="mdl-cell mdl-cell--4-col card-lesson mdl-card mdl-shadow--2dp product">
           <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text">Please describe the item consumed below:</h2>
+          <h2 class="mdl-card__title-text">Please describe a consumed product:</h2>
           </div>
           <div class="mdl-card__supporting-text">
 
-          Product: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" autofocus class="mdl-textfield__input" placeholder="e.g. Pepperoni Pizza" name="products[]" type="text"/></div> &ensp;
+          Product: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" autofocus class="mdl-textfield__input" placeholder="e.g. Cheese Pizza" name="products[]" type="text"/></div> &ensp;
           Quantity: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" class="mdl-textfield__input" type="number" min="1" placeholder="e.g. 1" value="1" name="quantities[]"/></div> &ensp; &ensp;
-          Price: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" class="mdl-textfield__input" type="number" min="0.01" step="0.01"  placeholder="e.g. 29,90" name="values[]"/></div> &ensp; &ensp;
+          Price: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" class="mdl-textfield__input" type="number" min="0.01" step="0.01"  placeholder="e.g. 29.90" name="values[]"/></div> &ensp; &ensp;
         <br>
           Who consumed: &ensp;
         <br>`
@@ -60,7 +60,7 @@ $(function () {
 
         markup += `</div>
           <div class="mdl-card__actions mdl-card--border">
-            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect delete-row">Remove Product</button>
+            <button type="button" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect delete-row">Remove product</button>
           </div>`;
 
         $(".products").append(markup);
@@ -145,6 +145,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 
     $('#tipswitch').on('change', function () {
+        alert("testing")
         $('#tipvalue').prop('disabled', function (i, v) {
             return !v;
         });
@@ -163,6 +164,6 @@ $(document).ready(function () {
     });
 });
 
-var $language = $('#language');
-var $languageform = $('#languageform')
-$language.on('change', $languageform.submit());
+//var $language = $('#language');
+//var $languageform = $('#languageform')
+//$language.on('change', $languageform.submit());

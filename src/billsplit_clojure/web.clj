@@ -71,12 +71,46 @@
         [:button#submitbutton.mdl-button.mdl-js-button.mdl-button--raised.submitbutton {:type "submit"} "Continue"]]]]))
 
 
-; next step: translate split.html to hiccup split
-; reference for loops: https://github.com/weavejester/hiccup
 (defn split [people-list]
   (page/html5
     [:head [:title "Billsplit"]]
     [:body
-     "Oi"
+     [:form#names {:type "hidden"}
+      (for [x (range (count people-list))]
+        [(keyword (str "input#customer" x)) {:type "hidden" :value (nth people-list x)}])
       ]
+     [:div
+     [:form#form {:role "form" :action "/result" :method "post"}
+      [:div#products.mdl-grid.products
+       [:div#product.mdl-cell.mdl-cell--4-col.card-lesson.mdl-card.mdl-shadow--2dp.product
+        [:div.mdl-card__title
+         [:h2.mdl-card__title-text "Describe a consumed product:"]]
+        [:div.mdl-card__supporting-text "Product: &ensp;" [:div.mdl-textfield.mdl-js-textfield [:input.mdl-textfield__input {:autofocus "true" :autocomplete "off" :placeholder "e.g. Pepperoni pizza" :name "products[]" :type "text"}]] "&ensp;
+                    Quantity: &ensp;" [:div.mdl-textfield.mdl-js-textfield [:input.mdl-textfield__input {:autocomplete "off" :type "number" :min "1" :placeholder "e.g. 1" :value "1" :name "quantities[]"}]] "&ensp; &ensp;
+                    Price: &ensp;" [:div.mdl-textfield.mdl-js-textfield [:input.mdl-textfield__input {:autocomplete "off" :type "number" :min "0.01" :step "0.01" :placeholder "e.g. 29.90" :name "values[]"}]] "&ensp;
+                    &ensp;"
+         [:br] "Who consumed the product: &ensp;"
+         [:br]
+         (for [person people-list]
+           [:label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect.customer
+            [:input.mdl-switch__input {:type "checkbox" :name person :checked "true"}]
+            [:span.mdl-switch__label person]]
+           )
+         ]
+        [:div.mdl-card__actions.mdl-card--border
+         [:button.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect.delete-row {:type "button"} "Remove product"]]]]
+      [:div
+       [:button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.add-row {:type "button"} [:i.material-icons "add"]]]
+      [:br] "If you're also giving a tip, please type the percentage (e.g. if giving a 15% tip, type 15 below):"
+      [:div
+       [:label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect {:for "tipswitch"}
+        [:input#tipswitch.mdl-switch__input {:type "checkbox" :name "tipswitch" :checked "true"}]
+        [:span.mdl-switch__label]]
+       [:div.mdl-textfield.mdl-js-textfield {:style "width:30px;"}
+        [:input#tipvalue.mdl-textfield__input {:type "text" :name "tipvalue" :value "10" :pattern #"-?[0-9]*(\.[0-9]+)?"}]
+        [:label.mdl-textfield__label {:for "tipvalue"} "10"]]
+       [:br]]
+      [:button#submitbutton.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored {:type "submit"} "Split this bill for me!"]]
+      ]
+     ]
      ))

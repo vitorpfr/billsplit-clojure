@@ -19,7 +19,11 @@
     (c/add-people-to-bill! (:bill app-component) people-list)
     {:status  200
      :headers {"Content-Type" "text/html"}
-     :body    @(:bill app-component)}))
+     :body    (-> (:bill app-component)
+                  deref
+                  keys
+                  web/split
+                  web/layout)}))
 
 (defn app-routes
   [app-component]
