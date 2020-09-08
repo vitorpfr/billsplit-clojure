@@ -9,8 +9,6 @@
    :price    java.math.BigDecimal
    :fraction (s/maybe (s/either clojure.lang.Ratio s/Int))})
 
-s/conditional
-
 (s/defschema Person
   {:name s/Str
    :products [Product]

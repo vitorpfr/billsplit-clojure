@@ -4,6 +4,7 @@
 
 (s/set-fn-validation! true)
 
+; keep this or not?
 (s/defn bill :- m/Bill
   []
   {})

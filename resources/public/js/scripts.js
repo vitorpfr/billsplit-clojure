@@ -1,3 +1,5 @@
+// Translate file from jquery to react in the end of the project
+
 $(function () {
     // Get name of customers (to be used in the 'add product' in 'split' page)
     var customers = $('.customer').length;
@@ -10,7 +12,7 @@ $(function () {
     $(document).on('click', '.btn-add', function (e) {
 
         var x = `<div class="mdl-textfield mdl-js-textfield">
-                 <input class="form-control mdl-textfield__input" id="p1" placeholder="e.g. John" name="fields[]" type="text"/>
+                 <input class="form-control mdl-textfield__input fields" id="p1" placeholder="e.g. John" name="fields[]" type="text"/>
                  </div>`
         $(".form-group").append(x);
         $("input:text:visible:last").focus();
@@ -27,21 +29,20 @@ $(function () {
 
     // Function to add cards (products)
     $(".add-row").click(function () {
-        alert("Testing")
         var product = $('.product').length;
 
         var markup = `
           <div class="mdl-cell mdl-cell--4-col card-lesson mdl-card mdl-shadow--2dp product">
           <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text">Please describe a consumed product:</h2>
+          <h2 class="mdl-card__title-text">Describe a consumed product:</h2>
           </div>
           <div class="mdl-card__supporting-text">
 
-          Product: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" autofocus class="mdl-textfield__input" placeholder="e.g. Cheese Pizza" name="products[]" type="text"/></div> &ensp;
+          Product: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" autofocus class="mdl-textfield__input" placeholder="e.g. Pepperoni Pizza" name="products[]" type="text"/></div> &ensp;
           Quantity: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" class="mdl-textfield__input" type="number" min="1" placeholder="e.g. 1" value="1" name="quantities[]"/></div> &ensp; &ensp;
           Price: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" class="mdl-textfield__input" type="number" min="0.01" step="0.01"  placeholder="e.g. 29.90" name="values[]"/></div> &ensp; &ensp;
         <br>
-          Who consumed: &ensp;
+          Who consumed this product: &ensp;
         <br>`
         console.log(customersarray);
         console.log(customers);
@@ -134,6 +135,24 @@ $(document).ready(function () {
 
         if (formInvalid) {
             alert('All fields must be filled to continue!');
+            return false;
+        }
+
+    });
+
+});
+
+function checkIfDuplicateExists(w){
+    return new Set(w).size !== w.length
+}
+
+// Validate forms submit button is clicked, preventing the user from advancing if there are two equal names
+$(document).ready(function () {
+
+    $("#submitbutton").click(function () {
+//        alert(checkIfDuplicateExists($('.fields')));
+        if (checkIfDuplicateExists($('.fields'))) {
+            alert('There is at least one duplicated person name. Please insert unique person names.');
             return false;
         }
 

@@ -61,7 +61,7 @@
           [:div.mdl-cell.mdl-cell--8-col
            [:div.form-group
             [:div.mdl-textfield.mdl-js-textfield
-             [:input#p1.form-control.mdl-textfield__input {:placeholder "e.g. John" :name "fields[]" :type "text" :autofocus "true"}]]]]
+             [:input#p1.form-control.mdl-textfield__input.fields {:placeholder "e.g. John" :name "fields[]" :type "text" :autofocus "true"}]]]]
           [:div.mdl-cell.mdl-cell--4-col
            [:button.mdl-button.mdl-js-button.mdl-button--fab.mdl-button--mini-fab.btn-add {:type "button"}
             [:i.material-icons "add"]]
@@ -89,12 +89,12 @@
                     Quantity: &ensp;" [:div.mdl-textfield.mdl-js-textfield [:input.mdl-textfield__input {:autocomplete "off" :type "number" :min "1" :placeholder "e.g. 1" :value "1" :name "quantities[]"}]] "&ensp; &ensp;
                     Price: &ensp;" [:div.mdl-textfield.mdl-js-textfield [:input.mdl-textfield__input {:autocomplete "off" :type "number" :min "0.01" :step "0.01" :placeholder "e.g. 29.90" :name "values[]"}]] "&ensp;
                     &ensp;"
-         [:br] "Who consumed the product: &ensp;"
+         [:br] "Who consumed this product: &ensp;"
          [:br]
-         (for [person people-list]
+         (for [x (range (count people-list))]
            [:label.mdl-switch.mdl-js-switch.mdl-js-ripple-effect.customer
-            [:input.mdl-switch__input {:type "checkbox" :name person :checked "true"}]
-            [:span.mdl-switch__label person]]
+            [:input.mdl-switch__input {:type "checkbox" :name (str "consumed" x "_0") :checked "true"}]
+            [:span.mdl-switch__label (nth people-list x)]]
            )
          ]
         [:div.mdl-card__actions.mdl-card--border
