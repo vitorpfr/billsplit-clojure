@@ -26,6 +26,7 @@
 
 (defn result-handler [request]
   (println request)
+
   {:status 200
    :headers {"Content-Type" "text/html"
              "Cache-Control" "no-cache"}

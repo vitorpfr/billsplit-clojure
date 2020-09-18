@@ -142,16 +142,19 @@ $(document).ready(function () {
 
 });
 
-function checkIfDuplicateExists(w){
-    return new Set(w).size !== w.length
+function hasDuplicates(arr) {
+    return (new Set(arr)).size !== arr.length;
 }
 
 // Validate forms submit button is clicked, preventing the user from advancing if there are two equal names
 $(document).ready(function () {
 
     $("#submitbutton").click(function () {
-//        alert(checkIfDuplicateExists($('.fields')));
-        if (checkIfDuplicateExists($('.fields'))) {
+
+//        debugger;
+        var fieldsInvalid = hasDuplicates($('.fields').toArray().map((x) => x.value.toLowerCase()));
+
+        if (fieldsInvalid) {
             alert('There is at least one duplicated person name. Please insert unique person names.');
             return false;
         }
@@ -164,7 +167,7 @@ $(document).ready(function () {
 $(document).ready(function () {
 
     $('#tipswitch').on('change', function () {
-        alert("testing")
+        alert("testingffff")
         $('#tipvalue').prop('disabled', function (i, v) {
             return !v;
         });
