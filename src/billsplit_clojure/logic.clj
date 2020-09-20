@@ -2,36 +2,33 @@
   (:require [schema.core :as s]
             [billsplit-clojure.model :as m]))
 
-(s/set-fn-validation! true)
+(s/set-fn-validation! false)
 
 ; section 1: add data to bill
 
-; keep this or not?
-(s/defn bill :- m/Bill
-  []
+(s/defn bill :- m/Bill []
   {})
 
-(s/defn person :- m/Person
+(s/defn ^:private person :- m/Person
   [name :- s/Str]
   {:name     name
    :products []})
 
-(s/defn add-person :- m/Bill
+(s/defn ^:private add-person :- m/Bill
   [bill :- m/Bill
    person-name :- s/Str]
   (assoc bill person-name (person person-name)))
 
-(s/defn add-people-list :- m/Bill
+(s/defn add-people-list-to-bill :- m/Bill
   [bill :- m/Bill
    people-list :- [s/Str]]
   (reduce add-person bill people-list))
 
-(s/defn product :- m/Product
+(s/defn product
   [name quantity price id]
   {:name     name
    :quantity quantity
-   :price    (bigdec price)
-   :fraction nil
+   :price    price
    :id       id})
 
 (s/defn add-product-to-person :- m/Bill
@@ -41,7 +38,6 @@
   (update-in bill [person-name :products] conj product))
 
 (s/defn add-product-to-bill :- m/Bill
-  "Given a list of people who consumed a product, adds a fraction of the product to each person bill"
   [bill :- m/Bill
    person-list :- [s/Str]
    {:keys [quantity] :as product} :- m/Product]
@@ -54,25 +50,26 @@
                bill
                product-fractions)))
 
-(s/defn add-products-to-bill
+(s/defn add-product-list-to-bill
   [bill :- m/Bill
    products :- [m/Product]
    who-consumed]
   (reduce (fn [bill {:keys [id] :as product}]
-               (add-product-to-bill bill (get who-consumed id) product))
-             bill
-             products))
+            (add-product-to-bill bill (get who-consumed id) product))
+          bill
+          products))
 
 ; testing - add-products-to-bill
+; remove after tests are written
 (let [bill (-> (bill)
-               (add-people-list ["Vitor" "Manuela"]))
-      products [(product "Onion" 1 50.00 0) (product "Fries" 1 30.00 1)]
+               (add-people-list-to-bill ["Vitor" "Manuela"]))
+      ; products are already on internal model here
+      products [(product "Onion" 1 50.00M 0) (product "Fries" 1 30.00M 1)]
       who-consumed {0 ["Vitor" "Manuela"], 1 ["Vitor"]}]
-  (add-products-to-bill bill products who-consumed))
+  (add-product-list-to-bill bill products who-consumed))
 
 
 ; section 2: calculate costs (after bill is ready)
-
 (s/defn calculate-product-cost
   [{:keys [quantity price fraction]} :- m/Product]
   (* quantity price fraction))
@@ -86,14 +83,24 @@
   (reduce-kv (fn [m k v]
                (assoc m k (f v))) {} m))
 
-(s/defn calculate-costs :- m/Bill
+(s/defn calculate-people-costs :- m/Bill
   [bill :- m/Bill]
   (update-map bill calculate-person-cost))
 
-;testing calculate-costs -  remove later
+(s/defn add-tip :- m/Bill
+  [bill :- m/Bill
+   tip-value]
+  (if tip-value
+    (update-map bill (fn [person] (update person
+                                          :to-pay
+                                          #(* (inc tip-value) %))))
+    bill))
+
+; testing calculate-costs
+; remove after tests are written
 (let [bill (-> (bill)
-               (add-people-list ["Vitor" "Manuela"]))
+               (add-people-list-to-bill ["Vitor" "Manuela"]))
       products [(product "Onion" 1 50.00 0) (product "Fries" 1 30.00 1)]
       who-consumed {0 ["Vitor" "Manuela"], 1 ["Vitor"]}
-      final-bill (add-products-to-bill bill products who-consumed)]
-  (calculate-costs final-bill))
+      final-bill (add-product-list-to-bill bill products who-consumed)]
+  (calculate-people-costs final-bill))

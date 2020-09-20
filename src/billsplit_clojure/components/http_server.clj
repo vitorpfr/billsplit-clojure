@@ -4,11 +4,12 @@
             [compojure.route :as route]
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer :all]
-            [billsplit-clojure.web :as web]))
+            [billsplit-clojure.web :as web]
+            [billsplit-clojure.controllers :as c]))
 
 (defn index-handler [_]
   {:status  200
-   :headers {"Content-Type" "text/html"
+   :headers {"Content-Type"  "text/html"
              "Cache-Control" "no-cache"}
    :body    (web/layout (web/index))})
 
@@ -17,20 +18,21 @@
                         :params
                         :fields)]
     {:status  200
-     :headers {"Content-Type" "text/html"
+     :headers {"Content-Type"  "text/html"
                "Cache-Control" "no-cache"}
      :body    (-> people-list
                   web/split
                   web/layout)
      :session {:people people-list}}))
 
-(defn result-handler [request]
-  (println request)
-
-  {:status 200
-   :headers {"Content-Type" "text/html"
-             "Cache-Control" "no-cache"}
-   :body (get-in request [:session :people])})
+(defn result-handler [{:keys [params] :as request}]
+  (let [people (get-in request [:session :people])]
+    {:status  200
+     :headers {"Content-Type"  "text/html"
+               "Cache-Control" "no-cache"}
+     :body    (-> people
+                  (c/create-bill params)
+                  (c/calculate-bill params))}))
 
 (defn app-routes []
   (routes

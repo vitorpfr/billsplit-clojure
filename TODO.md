@@ -1,9 +1,13 @@
 # To-do list
 ## Enquanto está sendo desenvolvido:
-- Tratar params map com adapters e integrar resultado com lógica pra calcular resultado
 - Construir página result
 - Construir página about
 - Especificar se preço do produto é total ou por unidade
+- Corrigir bugs da tip 
+    - Nao deixa preencher se o default é nao-preenchido, ex: desliga tip, volta uma pagina, avança, tenta preencher e nao deixa)
+    - Deixa colocar % maiores que 100
+    - Visual do input box pode ser melhor
+- Escrever testes
 
 ## Após estar funcionando:
 - Migrar JS de jquery pra react
