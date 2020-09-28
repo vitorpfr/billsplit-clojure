@@ -4,11 +4,11 @@
 (s/defschema PosInt (s/pred pos-int?))
 
 (s/defschema Product
-  {:name     s/Str
-   :quantity PosInt
-   :price    java.math.BigDecimal
-   :fraction (s/maybe (s/either clojure.lang.Ratio s/Int))
-   :id       s/Int})
+  {:name                      s/Str
+   :quantity                  PosInt
+   :price                     java.math.BigDecimal
+   (s/optional-key :fraction) (s/maybe (s/either clojure.lang.Ratio s/Int))
+   :id                        s/Int})
 
 (s/defschema Person
   {:name                    s/Str

@@ -3,7 +3,7 @@
             [billsplit-clojure.adapters :as a]))
 
 (defn create-bill [people params]
-  (let [bill     (l/add-people-list-to-bill (l/bill) people)
+  (let [bill     (l/add-people-list-to-empty-bill people)
         products (a/products-wire->internal params)
         who-consumed (a/consumed-wire->internal people params)]
     (l/add-product-list-to-bill bill products who-consumed)))

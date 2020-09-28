@@ -5,7 +5,8 @@
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer :all]
             [billsplit-clojure.web :as web]
-            [billsplit-clojure.controllers :as c]))
+            [billsplit-clojure.controllers :as c]
+            [billsplit-clojure.logic :as l]))
 
 (defn index-handler [_]
   {:status  200
@@ -26,19 +27,31 @@
      :session {:people people-list}}))
 
 (defn result-handler [{:keys [params] :as request}]
-  (let [people (get-in request [:session :people])]
+  (let [people (get-in request [:session :people])
+        bill-result (-> people
+                        (c/create-bill params)
+                        (c/calculate-bill params))
+        total-bill-value (l/get-total-bill-value bill-result)]
+    (println params)
     {:status  200
      :headers {"Content-Type"  "text/html"
                "Cache-Control" "no-cache"}
-     :body    (-> people
-                  (c/create-bill params)
-                  (c/calculate-bill params))}))
+     :body    (-> bill-result
+                  (web/result total-bill-value)
+                  web/layout)}))
+
+(defn about-handler [_]
+  {:status  200
+   :headers {"Content-Type"  "text/html"
+             "Cache-Control" "no-cache"}
+   :body    (web/layout (web/about))})
 
 (defn app-routes []
   (routes
     (GET "/" request (index-handler request))
     (POST "/split" request (split-handler request))
     (POST "/result" request (result-handler request))
+    (GET "/about" request (about-handler request))
     (route/not-found "Error, page not found!")))
 
 (defrecord HttpServer [port http-server app-component]

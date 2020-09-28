@@ -40,7 +40,7 @@ $(function () {
 
           Product: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" autofocus class="mdl-textfield__input" placeholder="e.g. Pepperoni Pizza" name="products[]" type="text"/></div> &ensp;
           Quantity: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" class="mdl-textfield__input" type="number" min="1" placeholder="e.g. 1" value="1" name="quantities[]"/></div> &ensp; &ensp;
-          Price: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" class="mdl-textfield__input" type="number" min="0.01" step="0.01"  placeholder="e.g. 29.90" name="values[]"/></div> &ensp; &ensp;
+          Total price: &ensp;<div class="mdl-textfield mdl-js-textfield"><input autocomplete="off" class="mdl-textfield__input" type="number" min="0.01" step="0.01"  placeholder="e.g. 29.90" name="values[]"/></div> &ensp; &ensp;
         <br>
           Who consumed this product: &ensp;
         <br>`
