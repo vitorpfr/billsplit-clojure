@@ -1,10 +1,10 @@
-# billsplit-clojure
+# billsplit-clojure [WIP]
 
-A website to split a bar or restaurant bill among several people, written in Clojure
+A website to split a bar or restaurant bill among several people, written in Clojure and done as a personal project.
 
 ## Usage
 
-TODO
+`lein run`
 
 ## License
 
