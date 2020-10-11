@@ -29,10 +29,9 @@
 (s/defn ^:private add-product-to-bill :- m/Bill
   [bill :- m/Bill
    person-list :- [s/Str]
-   {:keys [quantity] :as product} :- m/Product]
+   product :- m/Product]
   (let [fractions (repeat (count person-list) (/ 1 (count person-list)))
         product-fractions (zipmap person-list fractions)]
-    (println fractions)
     (reduce-kv (fn [bill person-name fraction]
                  (add-product-to-person bill
                                         person-name

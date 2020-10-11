@@ -24,7 +24,6 @@
 
 (s/defn consumed-wire->internal
   [people {:keys [products] :as params}]
-  (println params)
   (let [boolean-consumption-matrix (for [i (range (count products))] ; i are products
                                      (for [j (range (count people))] ; j are people
                                        (= "on" (get params (keyword (str "consumed" j "_" i)))))) ; consumed fields follow pattern consumed[person]_[product]

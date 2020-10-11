@@ -32,7 +32,6 @@
                         (c/create-bill params)
                         (c/calculate-bill params))
         total-bill-value (l/get-total-bill-value bill-result)]
-    (println params)
     {:status  200
      :headers {"Content-Type"  "text/html"
                "Cache-Control" "no-cache"}

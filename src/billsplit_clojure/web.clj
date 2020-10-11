@@ -111,7 +111,6 @@
 (defn result
   [bill-result
    total-value]
-  (println bill-result)                                     ; remove
   [:div
    [:h4 "Done! Check how much each person needs to pay below:"]
 
