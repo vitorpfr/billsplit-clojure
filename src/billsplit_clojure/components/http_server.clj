@@ -6,7 +6,8 @@
             [ring.middleware.defaults :refer :all]
             [billsplit-clojure.web :as web]
             [billsplit-clojure.controllers :as c]
-            [billsplit-clojure.logic :as l]))
+            [billsplit-clojure.logic :as l]
+            [ring.logger :as logger]))
 
 (defn index-handler [_]
   {:status  200
@@ -60,6 +61,7 @@
     (let [port (or port 3000)
           server (-> (app-routes)
                      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
+                     (logger/wrap-with-logger)
                      (server/run-server {:port port}))]
       (println (str "Running webserver at http://localhost:" port "/"))
       (assoc this :http-server server)))

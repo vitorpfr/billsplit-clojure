@@ -9,6 +9,7 @@
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
                  [ring/ring-defaults "0.3.2"]
+                 [ring-logger "1.0.1"]
                  [prismatic/schema "1.1.12"]
                  [stasis "1.0.0"]]
   :repl-options {:init-ns billsplit-clojure.core}
