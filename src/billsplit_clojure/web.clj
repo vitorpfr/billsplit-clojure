@@ -111,23 +111,26 @@
 (defn result
   [bill-result
    total-value]
-  [:div
-   [:h4 "Done! Check how much each person needs to pay below:"]
+  (page/html5
+    [:head [:title "Billsplit"]]
+    [:body
+     [:div
+      [:h4 "Done! Check how much each person needs to pay below:"]
 
-   (for [{:keys [name to-pay]} (vals bill-result)]
-     [:p name ": " (a/value-internal->wire to-pay)])
+      (for [{:keys [name to-pay]} (vals bill-result)]
+        [:p name ": " (a/value-internal->wire to-pay)])
 
-   [:h6 "Total bill value: " (a/value-internal->wire total-value)]
+      [:h6 "Total bill value: " (a/value-internal->wire total-value)]
 
-   [:div.sharethis-inline-share-buttons.st-custom-button {:data-title "Billsplit" :data-description "Results of the bill split" :data-url (for [{:keys [name to-pay]} (vals bill-result)]
-                                                                                                                                            (str name ": " (a/value-internal->wire to-pay)))}]
+      [:div.sharethis-inline-share-buttons.st-custom-button {:data-title "Billsplit" :data-description "Results of the bill split" :data-url (for [{:keys [name to-pay]} (vals bill-result)]
+                                                                                                                                               (str name ": " (a/value-internal->wire to-pay)))}]
 
-   [:br]
+      [:br]
 
-   [:div
-    [:form {:action "/" :method "get"}
-     [:button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored "Split another bill"]]]
-   ])
+      [:div
+       [:form {:action "/" :method "get"}
+        [:button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored "Split another bill"]]]
+      ]]))
 
 (defn about
   []
