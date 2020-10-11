@@ -3,7 +3,7 @@
             [billsplit-clojure.components.http-server :as http-server]))
 
 (def system-config
-  {:port 3000})
+  {:port 3030})
 
 (defn new-system [{:keys [port]}]
   (component/system-map :http-server (http-server/map->HttpServer {:port port})))
