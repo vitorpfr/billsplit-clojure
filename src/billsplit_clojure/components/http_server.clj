@@ -3,16 +3,18 @@
             [org.httpkit.server :as server]
             [ring.middleware.defaults :refer :all]))
 
+(defn run-server [port service]
+  (-> (:service-routes service)
+      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
+      ;(logger/wrap-with-logger) ; not needed right now
+      (server/run-server {:port port})))
+
 (defrecord HttpServer [port service]
   component/Lifecycle
 
   (start [this]
-    (let [server (-> (:service-routes service)
-                     (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-                     ;(logger/wrap-with-logger) ; not needed right now
-                     (server/run-server {:port port}))]
-      (println (str "Running webserver at http://localhost:" port "/"))
-      (assoc this :http-server server)))
+    (println (str "Running webserver at http://localhost:" port "/"))
+    (assoc this :http-server (run-server port service)))
 
   (stop [this]
     (println "Server stopped")

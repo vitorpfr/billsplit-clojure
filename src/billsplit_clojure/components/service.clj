@@ -33,8 +33,8 @@
   (let [people (get-in request [:session :people])
         bill-result (-> people
                         (c/create-bill params)
-                        (c/calculate-bill params))
-        total-bill-value (l/get-total-bill-value bill-result)]
+                        (c/calculate-bill-by-person params))
+        total-bill-value (c/calculate-total-bill-value bill-result)]
     (-> (web/result bill-result total-bill-value)
         web/with-layout
         success)))
