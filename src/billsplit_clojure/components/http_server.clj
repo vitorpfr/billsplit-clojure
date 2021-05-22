@@ -6,26 +6,26 @@
             [ring.middleware.defaults :refer :all]
             [billsplit-clojure.web :as web]
             [billsplit-clojure.controllers :as c]
-            [billsplit-clojure.logic :as l]
-            [ring.logger :as logger]))
+            [billsplit-clojure.logic :as l]))
 
-(defn index-handler [_]
+(defn success
+  [body]
   {:status  200
    :headers {"Content-Type"  "text/html"
              "Cache-Control" "no-cache"}
-   :body    (web/layout (web/index))})
+   :body    body})
+
+(defn index-handler [_]
+  (-> (web/index)
+      web/with-layout
+      success))
 
 (defn split-handler [request]
-  (let [people-list (-> request
-                        :params
-                        :fields)]
-    {:status  200
-     :headers {"Content-Type"  "text/html"
-               "Cache-Control" "no-cache"}
-     :body    (-> people-list
-                  web/split
-                  web/layout)
-     :session {:people people-list}}))
+  (let [people-list (get-in request [:params :fields])]
+    (-> (web/split people-list)
+        web/with-layout
+        success
+        (assoc :session {:people people-list}))))
 
 (defn result-handler [{:keys [params] :as request}]
   (let [people (get-in request [:session :people])
@@ -33,18 +33,14 @@
                         (c/create-bill params)
                         (c/calculate-bill params))
         total-bill-value (l/get-total-bill-value bill-result)]
-    {:status  200
-     :headers {"Content-Type"  "text/html"
-               "Cache-Control" "no-cache"}
-     :body    (-> bill-result
-                  (web/result total-bill-value)
-                  web/layout)}))
+    (-> (web/result bill-result total-bill-value)
+        web/with-layout
+        success)))
 
 (defn about-handler [_]
-  {:status  200
-   :headers {"Content-Type"  "text/html"
-             "Cache-Control" "no-cache"}
-   :body    (web/layout (web/about))})
+  (-> (web/about)
+      web/with-layout
+      success))
 
 (defn app-routes []
   (routes
@@ -61,7 +57,7 @@
     (let [port (or port 3000)
           server (-> (app-routes)
                      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-                     (logger/wrap-with-logger)
+                     ;(logger/wrap-with-logger) ; not needed right now
                      (server/run-server {:port port}))]
       (println (str "Running webserver at http://localhost:" port "/"))
       (assoc this :http-server server)))

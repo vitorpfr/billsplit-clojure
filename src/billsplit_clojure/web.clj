@@ -3,7 +3,7 @@
             [hiccup.page :as page]
             [billsplit-clojure.adapters :as a]))
 
-(defn layout
+(defn with-layout
   "Applies a layout to html pages."
   [page]
   (page/html5
