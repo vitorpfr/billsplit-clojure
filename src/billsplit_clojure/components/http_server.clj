@@ -1,61 +1,13 @@
 (ns billsplit-clojure.components.http-server
   (:require [com.stuartsierra.component :as component]
-            [compojure.core :refer :all]
-            [compojure.route :as route]
             [org.httpkit.server :as server]
-            [ring.middleware.defaults :refer :all]
-            [billsplit-clojure.web :as web]
-            [billsplit-clojure.controllers :as c]
-            [billsplit-clojure.logic :as l]))
+            [ring.middleware.defaults :refer :all]))
 
-(defn success
-  [body]
-  {:status  200
-   :headers {"Content-Type"  "text/html"
-             "Cache-Control" "no-cache"}
-   :body    body})
-
-(defn index-handler [_]
-  (-> (web/index)
-      web/with-layout
-      success))
-
-(defn split-handler [request]
-  (let [people-list (get-in request [:params :fields])]
-    (-> (web/split people-list)
-        web/with-layout
-        success
-        (assoc :session {:people people-list}))))
-
-(defn result-handler [{:keys [params] :as request}]
-  (let [people (get-in request [:session :people])
-        bill-result (-> people
-                        (c/create-bill params)
-                        (c/calculate-bill params))
-        total-bill-value (l/get-total-bill-value bill-result)]
-    (-> (web/result bill-result total-bill-value)
-        web/with-layout
-        success)))
-
-(defn about-handler [_]
-  (-> (web/about)
-      web/with-layout
-      success))
-
-(defn app-routes []
-  (routes
-    (GET "/" request (index-handler request))
-    (POST "/split" request (split-handler request))
-    (POST "/result" request (result-handler request))
-    (GET "/about" request (about-handler request))
-    (route/not-found "Error, page not found!")))
-
-(defrecord HttpServer [port http-server app-component]
+(defrecord HttpServer [port service]
   component/Lifecycle
 
   (start [this]
-    (let [port (or port 3000)
-          server (-> (app-routes)
+    (let [server (-> (:service-routes service)
                      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
                      ;(logger/wrap-with-logger) ; not needed right now
                      (server/run-server {:port port}))]
@@ -67,3 +19,6 @@
     (when-let [stop-server (:http-server this)]
       (stop-server :timeout 100))
     (assoc this :http-server nil)))
+
+(defn new-server [port]
+  (map->HttpServer {:port port}))
