@@ -12,5 +12,6 @@
                  [ring-logger "1.0.1"]
                  [prismatic/schema "1.1.12"]
                  [stasis "1.0.0"]]
-  :repl-options {:init-ns billsplit-clojure.core}
-  :main billsplit-clojure.core)
+  :profiles {:uberjar {:aot :all}}
+  :repl-options {:init-ns billsplit-clojure.main}
+  :main billsplit-clojure.main)

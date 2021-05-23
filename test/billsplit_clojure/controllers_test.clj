@@ -44,19 +44,19 @@
 
 (deftest calculate-bill
   (testing "given a bill with products, calculate how much each person has to pay"
-    (is (= (c/calculate-bill {"John" {:name "John"
-                                      :products [{:fraction 1/2
+    (is (= (c/calculate-bill-by-person {"John" {:name "John"
+                                      :products       [{:fraction 1/2
                                                   :id       0
                                                   :name     "Fries"
                                                   :price    30M
                                                   :quantity 1}]}
-                              "Mary" {:name "Mary"
+                              "Mary"           {:name "Mary"
                                       :products [{:id       0
                                                   :name     "Fries"
                                                   :price    30M
                                                   :quantity 1
                                                   :fraction 1/2}]}}
-                             {:tipswitch "on", :tipvalue "10"})
+                                       {:tipswitch "on", :tipvalue "10"})
            {"John" {:name "John"
                     :products [{:fraction 1/2
                                 :id       0

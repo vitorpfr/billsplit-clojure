@@ -1,9 +1,5 @@
 (ns billsplit-clojure.adapters
-  (:require [schema.core :as s]
-            [billsplit-clojure.model :as m]))
-
-; test params - remove after tests are written
-;(def params {:products ["Onion" "Fries"], :quantities ["1" "1"], :values ["50" "30"], :consumed0_0 "on", :consumed1_0 "on", :consumed0_1 "on", :tipswitch "on", :tipvalue "10"})
+  (:require [schema.core :as s]))
 
 (defn tip-wire->internal
   [{:keys [tipswitch tipvalue]}]

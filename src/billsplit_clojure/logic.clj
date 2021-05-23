@@ -2,7 +2,6 @@
   (:require [schema.core :as s]
             [billsplit-clojure.model :as m]))
 
-(s/set-fn-validation! false)
 
 (s/defn ^:private empty-bill :- m/Bill [] {})
 
@@ -39,18 +38,6 @@
                bill
                product-fractions)))
 
-(let [bill {"John" {:name     "John"
-                    :products []}
-            "Mary" {:name     "Mary"
-                    :products []}}]
-  (add-product-to-bill
-    bill
-    ["Mary"]
-    {:id       0
-     :name     "Onion"
-     :price    50M
-     :quantity 2}))
-
 (s/defn add-product-list-to-bill
   [bill :- m/Bill
    products :- [m/Product]
@@ -85,15 +72,6 @@
                                           :to-pay
                                           #(* (bigdec (inc tip-value)) %))))
     bill))
-
-; testing calculate-costs
-;; remove after tests are written
-;(let [bill (-> (empty-bill)
-;               (add-people-list-to-bill ["Vitor" "Manuela"]))
-;      products [(product "Onion" 1 50.00 0) (product "Fries" 1 30.00 1)]
-;      who-consumed {0 ["Vitor" "Manuela"], 1 ["Vitor"]}
-;      final-bill (add-product-list-to-bill bill products who-consumed)]
-;  (calculate-people-costs final-bill))
 
 (defn get-total-bill-value
   [bill]
