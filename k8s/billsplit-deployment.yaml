@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billsplit-deployment
+spec:
+  template:
+    metadata:
+      labels:
+        app: billsplit-deployment
+    spec:
+      containers:
+        - name: billsplit-server
+          image: vitorpfr/billsplit:0.2
+          ports:
+            - containerPort: 3030
+  replicas: 3
+  selector:
+    matchLabels:
+      app: billsplit-deployment
